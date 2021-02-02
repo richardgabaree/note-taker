@@ -1,7 +1,7 @@
 {
   "name": "public",
   "version": "1.0.0",
-  "description": "",
+  "description": "Homework 11",
   "main": "index.js",
   "dependencies": {
     "express": "^4.17.1",
@@ -9,9 +9,18 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richardgabaree/note-taker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/richardgabaree/note-taker/issues"
+  },
+  "homepage": "https://github.com/richardgabaree/note-taker#readme"
 }

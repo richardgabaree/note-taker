@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(express.urlencoded({ extends: true }));
-app.use(express.json());'git pushgit '
+app.use(express.json());
 //connects the css and js files from the puplic folder
 app.use(express.static("public"));
 
