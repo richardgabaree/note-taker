@@ -4,14 +4,13 @@ const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-app.use(express.urlencoded({ extends: true }));
+app.use(express.urlencoded({extended: true }));
 app.use(express.json());
 //connects the css and js files from the puplic folder
 app.use(express.static("public"));
 
-
-require("./routes/apiRoute")(app);
-require("./routes/htmlRoute")(app);
+// require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
 
 
 app.listen(PORT, function() {
