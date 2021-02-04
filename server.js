@@ -10,7 +10,7 @@ const app = express();
 app.use(express.urlencoded({extended: true }));
 app.use(express.json());
 //connects the css and js files from the puplic folder
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 // require("./routes/apiRoute")(app);
 // require("./routes/htmlRoute")(app);
@@ -28,25 +28,27 @@ app.use(express.static('public'));
 
     app.post("/api/notes", (req, res) => {
         const userNotes = req.body;
+        console.log(userNotes);
 
-        fs.readFileSync("./db/db.json", (err, res) => {
-          if (err) throw err;
-          dbData = JSON.parse(data);
+        const data = fs.readFileSync('./db/db.json', 'utf8');
+        const dbData = JSON.parse(data);
+
           dbData.push(userNotes);
+          
           let number = 1;
           dbData.forEach((note, index) => {
             note.id = number;
             number++;
             return dbData;
           })
-        console.log(dbData);
+          console.log(dbData);
 
         stringData = JSON.stringify(dbData);
 
-        fs.writeField("./db/db.json", stringData, (err, data) => {
+        fs.writeFile("./db/db.json", stringData, (err, data) => {
            if (err) throw err;
         });
-      });
+      // });
       res.send('Note added');       
     });
     
@@ -76,11 +78,11 @@ app.use(express.static('public'));
     })
 //html routs
   app.get("/", (req, res) => {
-      res.sendFile(path.join(__dirname, '.index.html'))
+      res.sendFile(path.join(__dirname, '/index.html'))
     });
 
   app.get("/notes", (req, res) => {
-      res.sendFile(path.join(__dirname, '.notes.html'))
+      res.sendFile(path.join(__dirname, '/public/notes.html'))
     });
 
 
