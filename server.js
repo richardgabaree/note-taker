@@ -1,55 +1,90 @@
 const fs = require("fs");
 const express = require("express");
-const app = express();
+
+const path = require("path")
 
 const PORT = process.env.PORT || 8080;
+
+const app = express();
 
 app.use(express.urlencoded({extended: true }));
 app.use(express.json());
 //connects the css and js files from the puplic folder
-app.use(express.static("public"));
+app.use(express.static('public'));
 
 // require("./routes/apiRoute")(app);
 // require("./routes/htmlRoute")(app);
 
-app.listen(PORT, function() {
-    console.log(`App listening on: PORT:${PORT}`);
-  });
-
-  const path = require("path")
 // const indexCode = require("../public/assets/js/index");
 
-module.exports = function(app) {
     // * GET `/api/notes` - Should read the `db.json` file and return all saved notes as JSON.
-    app.get("/api/notes", (req, res) => {
-        let content = fs.readFile("./db/db.json", "utf8");
-            //read the db.json file and return all saved notes as JSON
-            res.json(content);
+    app.get('/api/notes', (req, res) => {
+      // store data in a variable
+      const dbData = fs.readFileSync('./db/db.json', 'utf8');
+      console.log(dbData);
+      // parse data into json and send back to browser
+      res.json(JSON.parse(dbData))
     });
 
-    // * POST `/api/notes` - Should receive a new note to save on the request body, add it to the `db.json` file, and then return the new note to the client.
-    app.post("api/notes", (req, res) => {
-        indexCode.push(req.body);
-        res.json(indexCode);
+    app.post("/api/notes", (req, res) => {
+        const userNotes = req.body;
+
+        fs.readFileSync("./db/db.json", (err, res) => {
+          if (err) throw err;
+          dbData = JSON.parse(data);
+          dbData.push(userNotes);
+          let number = 1;
+          dbData.forEach((note, index) => {
+            note.id = number++;
+            number++;
+            return dbData;
+          })
+        console.log(dbData);
+
+        stringData = stringify(dbData);
+
+        fs.writeField("./db/db.json", stringData, (err, data) => {
+           if (err) throw err;
+        });
+      });
+      res.send('Note added');       
     });
-
-
-    // * DELETE `/api/notes/:id` In order to delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
-    app.post("/api/notes/:id", (req, res) => {
-      
-    })
-};
-
-var path = require("path")
-
-module.exports = function(app) {
     
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'))
-});
+    // * DELETE `/api/notes/:id` In order to delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
+    app.delete("/api/notes/:id", (req, res) => {
+      const deleteNote = req.params.id;
+    console.log(deleteNote);
 
-// return the `notes.html` file.
-app.get("/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/notes.html'))
+    fs.readFile('./db/db.json', (err, data) => {
+      if (err) throw err;
+
+      // dbData = JSON.parse(dbData);
+        for (let i = 0; i < dbData.length; i++) {
+          if (dbData[i].id === Number(deleteNote)) {
+            dbData.splice(i, 1);
+          }
+        }
+        console.log(dbData);
+        stringData = JSON.stringify(dbData);
+
+      fs.writeFile('./db/db.json', stringData, (err, data) => {
+        if (err) throw err;
+      });
+    });
+    // Express response.status(204)
+    res.status(204).send();
+    })
+    
+  app.get("/", (req, res) => {
+      res.sendFile(path.join(__dirname, './public/index.html'))
+    });
+
+  // return the `notes.html` file.
+  app.get("/notes", (req, res) => {
+      res.sendFile(path.join(__dirname, './public/notes.html'))
+    });
+
+
+app.listen(PORT, function() {
+  console.log(`Server listening on: PORT:${PORT}`);
 });
-};
