@@ -55,25 +55,26 @@ app.use(express.static(__dirname + '/public'));
     // * DELETE `/api/notes/:id` In order to delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
     app.delete("/api/notes/:id", (req, res) => {
       const deleteNote = req.params.id;
-    console.log(deleteNote);
+      console.log(deleteNote);
 
     fs.readFile('./db/db.json', (err, data) => {
       if (err) throw err;
 
-      // dbData = JSON.parse(dbData);
+      const dbData = JSON.parse(data);
         for (let i = 0; i < dbData.length; i++) {
           if (dbData[i].id === Number(deleteNote)) {
             dbData.splice([i], 1);
           }
         }
         console.log(dbData);
+     
         stringData = JSON.stringify(dbData);
 
       fs.writeFile('./db/db.json', stringData, (err, data) => {
         if (err) throw err;
       });
     });
-    // Express response.status(204)
+    // // Express response.status(204)
     res.status(204).send();
     })
 //html routs
