@@ -35,13 +35,13 @@ app.use(express.static('public'));
           dbData.push(userNotes);
           let number = 1;
           dbData.forEach((note, index) => {
-            note.id = number++;
+            note.id = number;
             number++;
             return dbData;
           })
         console.log(dbData);
 
-        stringData = stringify(dbData);
+        stringData = JSON.stringify(dbData);
 
         fs.writeField("./db/db.json", stringData, (err, data) => {
            if (err) throw err;
@@ -61,7 +61,7 @@ app.use(express.static('public'));
       // dbData = JSON.parse(dbData);
         for (let i = 0; i < dbData.length; i++) {
           if (dbData[i].id === Number(deleteNote)) {
-            dbData.splice(i, 1);
+            dbData.splice([i], 1);
           }
         }
         console.log(dbData);
@@ -74,17 +74,16 @@ app.use(express.static('public'));
     // Express response.status(204)
     res.status(204).send();
     })
-    
+//html routs
   app.get("/", (req, res) => {
-      res.sendFile(path.join(__dirname, './public/index.html'))
+      res.sendFile(path.join(__dirname, '.index.html'))
     });
 
-  // return the `notes.html` file.
   app.get("/notes", (req, res) => {
-      res.sendFile(path.join(__dirname, './public/notes.html'))
+      res.sendFile(path.join(__dirname, '.notes.html'))
     });
 
 
-app.listen(PORT, function() {
-  console.log(`Server listening on: PORT:${PORT}`);
-});
+  app.listen(PORT, function() {
+    console.log(`Server listening on: PORT:${PORT}`);
+  });
